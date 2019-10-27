@@ -6,23 +6,20 @@ import ItemContainer from './components/ItemContainer.jsx';
 
 import { getItems, addItem, editItem, deleteItem, markItemAsTodoDone, sortItems, searchItems } from './utils/helper.js';
 
-export default function App () {
+function App () {
   const [dialog, setDialog] = useState(false);
   const [visualList, setVisualList] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
   const [list, setList] = useState(getItems());
   const [byDateSelectFilter, setByDateSelectFilter] = useState("");
 
-  const onAddClicked = () => { setDialog(true); }
-  const onSortClicked = () => { setVisualList(sortItems(list)); }
-  const onSearchChange = (event) => { timeoutSearch(event.target.value, list); }
-
-  const deleteItemHandler = (id) => { setList(deleteItem(id)); setVisualList(false); }
-  const markItemAsTodoDoneHandler = (id) => { setList(markItemAsTodoDone(id)); setVisualList(false); }
-  const editItemHandler = (item) => { setDialog(true); setItemToEdit(item); }
+  const deleteItemHandler = id => { setList(deleteItem(id)); setVisualList(false); }
+  const markItemAsTodoDoneHandler = id => { setList(markItemAsTodoDone(id)); setVisualList(false); }
+  const editItemHandler = item => { setDialog(true); setItemToEdit(item); }
   const closeDialog = () => { setDialog(false); setItemToEdit(null); }
+  const search = (value, listToSearch) => { setVisualList(searchItems(value, listToSearch)); }
 
-  const callbackFromDialog = (item) => {
+  const callbackFromDialog = item => {
     setDialog(false);
     setItemToEdit(null);
     setVisualList(false);
@@ -31,11 +28,9 @@ export default function App () {
     else { setList(editItem(item)); }
   }
 
-  const timeoutSearch = (value, listToSearch) => {
-    setTimeout(() => {
-      setVisualList(searchItems(value, listToSearch));
-    }, 500);
-  }
+  const onAddClicked = () => { setDialog(true); }
+  const onSortClicked = () => { setVisualList(sortItems(list)); }
+  const onSearchChange = event => { search(event.target.value, list); }
 
   return (
     <>
@@ -44,9 +39,11 @@ export default function App () {
         <li><button className="item positive" onClick={onSortClicked}>Sort</button></li>
         <li><input className="item search" type="text" name="search" placeholder="Search" onChange={onSearchChange} /></li>
       </ul>
-      {dialog && <Dialog close={closeDialog} parent={callbackFromDialog} item={itemToEdit} />}
+      {dialog && <Dialog close={closeDialog} callback={callbackFromDialog} item={itemToEdit} />}
       <ItemContainer items={visualList ? visualList : list} deleteItem={deleteItemHandler}
                      editItem={editItemHandler} markItemAsTodoDone={markItemAsTodoDoneHandler} />
     </>
   );
 }
+
+export default App;

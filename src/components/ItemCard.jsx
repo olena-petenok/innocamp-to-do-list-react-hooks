@@ -1,37 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class ItemCard extends React.Component {
-  constructor(props) { super(props); }
+function ItemCard (props) {
 
-  onDeleteItemClicked = () => { this.props.deleteItem(this.props.item.id); }
-  onMarkItemClicked = () => { this.props.markItemAsTodoDone(this.props.item.id); }
-  onEditItemClicked = () => { this.props.editItem(this.props.item); }
+  const onDeleteItemClicked = () => { props.deleteItem(props.item.id); }
+  const onMarkItemClicked = () => { props.markItemAsTodoDone(props.item.id); }
+  const onEditItemClicked = () => { props.editItem(props.item); }
 
-  render() {
-    const { title, description, priority, deadline, attachedImage, isDone } = this.props.item;
+  const { title, description, priority, deadline, attachedImage, isDone } = props.item;
 
-    return (
-      <div className="item">
-        <p className={`title ${isDone ? `line-through` : ``}`}>{title}</p>
-        <p className={`text ${isDone ? `line-through` : ``}`}>{description ? description : `-`}</p>
-        <p className={`text ${isDone ? `line-through` : ``}`}>
-          Priority:
-          <span className={`priority-${priority}`}>{` ${priority}`}</span>
-        </p>
-        <p className={`text ${isDone ? `line-through` : ``}`}>{deadline ? deadline : `-`}</p>
-        <section className="buttons">
-          <input type="button" className="input negative" value="Delete"
-                 onClick={this.onDeleteItemClicked} />
-          <input type="button" className="input positive" value="Edit"
-                 onClick={this.onEditItemClicked} />
-          <input type="button" className="input positive" value={isDone ? `Mark as ToDo` : `Mark as Done`}
-                 onClick={this.onMarkItemClicked} />
-          {attachedImage && <a href={attachedImage} download className="input positive">Download</a>}
-        </section>
-      </div>
-    );
-  }
+  return (
+    <div className="item">
+      <p className={`title ${isDone ? `line-through` : ``}`}>{title}</p>
+      <p className={`text ${isDone ? `line-through` : ``}`}>{description ? description : `-`}</p>
+      <p className={`text ${isDone ? `line-through` : ``}`}>
+        Priority:
+        <span className={`priority-${priority}`}>{` ${priority}`}</span>
+      </p>
+      <p className={`text ${isDone ? `line-through` : ``}`}>{deadline ? deadline : `-`}</p>
+      <section className="buttons">
+        <input type="button" className="input negative" value="Delete"
+               onClick={onDeleteItemClicked} />
+        <input type="button" className="input positive" value="Edit"
+               onClick={onEditItemClicked} />
+        <input type="button" className="input positive" value={isDone ? `Mark as ToDo` : `Mark as Done`}
+               onClick={onMarkItemClicked} />
+        {attachedImage && <a href={attachedImage} download className="input positive">Download</a>}
+      </section>
+    </div>
+  );
 }
 
 ItemCard.propTypes = {
